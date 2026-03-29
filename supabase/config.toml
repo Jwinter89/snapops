@@ -14,3 +14,15 @@ minimum_password_length = 8
 [auth.email]
 enable_signup = true
 enable_confirmations = false
+
+[auth.email.template.confirmation]
+subject = "Confirm your SnapOps account"
+content_path = "./supabase/templates/confirm.html"
+
+[auth.email.template.recovery]
+subject = "Reset your SnapOps password"
+content_path = "./supabase/templates/reset.html"
+
+[auth.email.template.magic_link]
+subject = "Sign in to SnapOps"
+content_path = "./supabase/templates/magic_link.html"
