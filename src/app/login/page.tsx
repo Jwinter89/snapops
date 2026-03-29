@@ -30,6 +30,14 @@ export default function LoginPage() {
       if (error) {
         setError(error.message)
       } else {
+        // Send welcome email in background
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          fetch('/api/email/send-welcome', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${session.access_token}` },
+          }).catch(() => {})
+        }
         setMessage('Check your email for a confirmation link.')
       }
     } else {
