@@ -69,6 +69,11 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     console.error('Checkout error:', message)
-    return NextResponse.json({ error: 'Failed to create checkout', detail: message }, { status: 500 })
+    return NextResponse.json({
+      error: 'Failed to create checkout',
+      detail: message,
+      hasKey: !!process.env.STRIPE_SECRET_KEY,
+      keyPrefix: process.env.STRIPE_SECRET_KEY?.substring(0, 10),
+    }, { status: 500 })
   }
 }
