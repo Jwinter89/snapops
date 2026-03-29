@@ -1,9 +1,7 @@
 import Stripe from 'stripe'
 
 export function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    maxNetworkRetries: 3,
-  })
+  return new Stripe(process.env.STRIPE_SECRET_KEY!)
 }
 
 export const PLANS = {
