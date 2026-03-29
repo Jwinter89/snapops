@@ -67,7 +67,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
-    console.error('Checkout error:', error)
-    return NextResponse.json({ error: 'Failed to create checkout' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Checkout error:', message)
+    return NextResponse.json({ error: 'Failed to create checkout', detail: message }, { status: 500 })
   }
 }
