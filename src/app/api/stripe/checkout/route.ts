@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 const PAYMENT_LINKS = {
-  pro: process.env.STRIPE_PRO_PAYMENT_LINK || 'https://buy.stripe.com/test_9B6fZj1vB35Ec3Q3b2bjW01',
-  business: process.env.STRIPE_BUSINESS_PAYMENT_LINK || 'https://buy.stripe.com/test_3cI9AV6PV7lUfg2bHybjW02',
+  pro: process.env.STRIPE_PRO_PAYMENT_LINK || 'https://buy.stripe.com/4gMbJ20Fz4XAfwJ1ER7IY01',
+  business: process.env.STRIPE_BUSINESS_PAYMENT_LINK || 'https://buy.stripe.com/dRm5kEbkd2Ps98l97j7IY02',
 }
 
 export async function POST(req: NextRequest) {
