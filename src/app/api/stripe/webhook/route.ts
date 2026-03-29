@@ -15,6 +15,12 @@ function getServiceClient() {
   )
 }
 
+function resolvePlan(amountTotal: number | null): 'pro' | 'business' {
+  // $49 = 4900 cents = business, everything else = pro
+  if (amountTotal && amountTotal >= 4900) return 'business'
+  return 'pro'
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')
@@ -24,8 +30,8 @@ export async function POST(req: NextRequest) {
   }
 
   let event: Stripe.Event
+  const stripe = getStripe()
   try {
-    const stripe = getStripe()
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
@@ -39,15 +45,30 @@ export async function POST(req: NextRequest) {
       const userId = session.metadata?.supabase_user_id || session.client_reference_id
 
       if (userId) {
-        const priceId = session.line_items?.data?.[0]?.price?.id
-        const resolvedPlan: 'pro' | 'business' = priceId === process.env.STRIPE_BUSINESS_PRICE_ID ? 'business' : 'pro'
+        // Retrieve the full session with line items to determine plan
+        let plan: 'pro' | 'business' = resolvePlan(session.amount_total)
+
+        // Try to get exact price from line items via API
+        try {
+          const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+            expand: ['line_items'],
+          })
+          const priceId = fullSession.line_items?.data?.[0]?.price?.id
+          if (priceId === process.env.STRIPE_BUSINESS_PRICE_ID) {
+            plan = 'business'
+          } else if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
+            plan = 'pro'
+          }
+        } catch {
+          // Fallback to amount-based detection already set above
+        }
 
         await supabase
           .from('profiles')
           .update({
-            plan: resolvedPlan,
-            stripe_subscription_id: session.subscription as string,
-            stripe_customer_id: session.customer as string,
+            plan,
+            stripe_subscription_id: (session.subscription as string) || null,
+            stripe_customer_id: (session.customer as string) || null,
           })
           .eq('id', userId)
       }
