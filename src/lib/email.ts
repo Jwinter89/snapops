@@ -4,7 +4,7 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY!)
 }
 
-const FROM = 'SnapOps <hello@snapops.app>'
+const FROM = process.env.EMAIL_FROM || 'SnapOps <hello@theboredplan.app>'
 
 export async function sendWelcomeEmail(to: string) {
   const resend = getResend()
