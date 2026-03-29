@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import SOPGenerator from '@/components/SOPGenerator'
 import SOPList from '@/components/SOPList'
-import { FileText, LogOut } from 'lucide-react'
+import { FileText, LogOut, CreditCard } from 'lucide-react'
 import type { UserProfile } from '@/lib/types'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [upgrading, setUpgrading] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -33,6 +34,46 @@ export default function DashboardPage() {
     }
     loadUser()
   }, [router])
+
+  async function handleUpgrade(plan: 'pro' | 'business') {
+    setUpgrading(true)
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ plan }),
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch {
+      setUpgrading(false)
+    }
+  }
+
+  async function handleManageBilling() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+
+    const res = await fetch('/api/stripe/portal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+    })
+    const data = await res.json()
+    if (data.url) {
+      window.location.href = data.url
+    }
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -59,9 +100,21 @@ export default function DashboardPage() {
             <span className="text-xs text-gray-500">
               {user?.plan === 'free' ? `${user.sops_this_month}/5 free SOPs used` : `${user?.plan} plan`}
             </span>
-            {user?.plan === 'free' && (
-              <button className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 transition-colors">
-                Upgrade
+            {user?.plan === 'free' ? (
+              <button
+                onClick={() => handleUpgrade('pro')}
+                disabled={upgrading}
+                className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:bg-gray-300 transition-colors"
+              >
+                {upgrading ? 'Loading...' : 'Upgrade to Pro'}
+              </button>
+            ) : (
+              <button
+                onClick={handleManageBilling}
+                className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <CreditCard className="h-3 w-3" />
+                Billing
               </button>
             )}
             <button
