@@ -60,8 +60,8 @@ export async function POST(req: NextRequest) {
       mode: 'subscription',
       payment_method_types: ['card'],
       line_items: [{ price: planConfig.priceId, quantity: 1 }],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?upgraded=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://snapops.app'}/dashboard?upgraded=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://snapops.app'}/dashboard`,
       metadata: { supabase_user_id: user.id, plan },
     })
 
@@ -69,11 +69,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     console.error('Checkout error:', message)
-    return NextResponse.json({
-      error: 'Failed to create checkout',
-      detail: message,
-      hasKey: !!process.env.STRIPE_SECRET_KEY,
-      keyPrefix: process.env.STRIPE_SECRET_KEY?.substring(0, 10),
-    }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to create checkout', detail: message }, { status: 500 })
   }
 }
