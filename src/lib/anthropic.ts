@@ -1,10 +1,9 @@
 import Anthropic from '@anthropic-ai/sdk'
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-})
-
 export async function generateSOP(input: string, industry?: string): Promise<string> {
+  const client = new Anthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY!,
+  })
   const systemPrompt = `You are an expert technical writer who creates professional Standard Operating Procedures (SOPs).
 
 Given raw notes, bullet points, or informal descriptions of a process, transform them into a clear, professional SOP document.
