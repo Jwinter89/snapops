@@ -6,6 +6,9 @@ export async function GET(req: NextRequest) {
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/dashboard'
 
+  // Prevent open redirect — only allow relative paths
+  const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard'
+
   if (code) {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,5 +17,5 @@ export async function GET(req: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code)
   }
 
-  return NextResponse.redirect(new URL(next, req.url))
+  return NextResponse.redirect(new URL(safeNext, req.url))
 }

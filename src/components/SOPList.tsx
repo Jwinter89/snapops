@@ -17,8 +17,8 @@ export default function SOPList({ refreshKey }: { refreshKey: number }) {
   }, [refreshKey])
 
   async function loadSOPs() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) return
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
 
     const { data } = await supabase
       .from('sops')

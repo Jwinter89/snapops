@@ -17,8 +17,8 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function loadUser() {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
+      const { data: { user: authUser }, error } = await supabase.auth.getUser()
+      if (error || !authUser) {
         router.push('/login')
         return
       }
@@ -26,7 +26,7 @@ export default function DashboardPage() {
       const { data: profile } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', session.user.id)
+        .eq('id', authUser.id)
         .single()
 
       setUser(profile)
@@ -35,17 +35,22 @@ export default function DashboardPage() {
     loadUser()
   }, [router])
 
+  async function getAccessToken(): Promise<string | null> {
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token ?? null
+  }
+
   async function handleUpgrade(plan: 'pro' | 'business') {
     setUpgrading(true)
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) return
+    const token = await getAccessToken()
+    if (!token) return
 
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ plan }),
       })
@@ -59,14 +64,14 @@ export default function DashboardPage() {
   }
 
   async function handleManageBilling() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) return
+    const token = await getAccessToken()
+    if (!token) return
 
     const res = await fetch('/api/stripe/portal', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
+        'Authorization': `Bearer ${token}`,
       },
     })
     const data = await res.json()

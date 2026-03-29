@@ -4,7 +4,9 @@ import Stripe from 'stripe'
 
 export const dynamic = 'force-dynamic'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!)
+}
 
 function getServiceClient() {
   return createClient(
@@ -15,13 +17,17 @@ function getServiceClient() {
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
-  const sig = req.headers.get('stripe-signature')!
+  const sig = req.headers.get('stripe-signature')
+
+  if (!sig) {
+    return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
+  }
 
   let event: Stripe.Event
   try {
+    const stripe = getStripe()
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
-  } catch (err) {
-    console.error('Webhook signature verification failed:', err)
+  } catch {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
@@ -30,14 +36,16 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session
-      const userId = session.metadata?.supabase_user_id
-      const plan = session.metadata?.plan as 'pro' | 'business'
+      const userId = session.metadata?.supabase_user_id || session.client_reference_id
 
-      if (userId && plan) {
+      if (userId) {
+        const priceId = session.line_items?.data?.[0]?.price?.id
+        const resolvedPlan: 'pro' | 'business' = priceId === process.env.STRIPE_BUSINESS_PRICE_ID ? 'business' : 'pro'
+
         await supabase
           .from('profiles')
           .update({
-            plan,
+            plan: resolvedPlan,
             stripe_subscription_id: session.subscription as string,
             stripe_customer_id: session.customer as string,
           })
@@ -56,19 +64,13 @@ export async function POST(req: NextRequest) {
         .eq('stripe_customer_id', customerId)
         .single()
 
-      if (profile) {
-        if (subscription.status === 'active') {
-          // Determine plan from price
-          const priceId = subscription.items.data[0]?.price?.id
-          let plan: 'pro' | 'business' = 'pro'
-          if (priceId === process.env.STRIPE_BUSINESS_PRICE_ID) {
-            plan = 'business'
-          }
-          await supabase
-            .from('profiles')
-            .update({ plan, stripe_subscription_id: subscription.id })
-            .eq('id', profile.id)
-        }
+      if (profile && subscription.status === 'active') {
+        const priceId = subscription.items.data[0]?.price?.id
+        const plan = priceId === process.env.STRIPE_BUSINESS_PRICE_ID ? 'business' : 'pro'
+        await supabase
+          .from('profiles')
+          .update({ plan, stripe_subscription_id: subscription.id })
+          .eq('id', profile.id)
       }
       break
     }
