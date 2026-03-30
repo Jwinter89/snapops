@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { SOP } from '@/lib/types'
 import ReactMarkdown from 'react-markdown'
-import { ChevronDown, ChevronUp, Trash2, Search } from 'lucide-react'
+import { ChevronDown, ChevronUp, Trash2, Search, FileDown } from 'lucide-react'
 
 export default function SOPList({ refreshKey }: { refreshKey: number }) {
   const [sops, setSops] = useState<SOP[]>([])
@@ -95,13 +95,39 @@ export default function SOPList({ refreshKey }: { refreshKey: number }) {
                   <div className="prose prose-sm max-w-none text-gray-800 mb-4">
                     <ReactMarkdown>{sop.content}</ReactMarkdown>
                   </div>
-                  <button
-                    onClick={() => handleDelete(sop.id)}
-                    className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                    Delete
-                  </button>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={async () => {
+                        const { data: { session } } = await supabase.auth.getSession()
+                        if (!session) return
+                        const res = await fetch(`/api/export-pdf?id=${sop.id}`, {
+                          headers: { 'Authorization': `Bearer ${session.access_token}` },
+                        })
+                        if (res.status === 403) {
+                          alert('PDF export requires a Pro plan. Upgrade from your dashboard.')
+                          return
+                        }
+                        const html = await res.text()
+                        const win = window.open('', '_blank')
+                        if (win) {
+                          win.document.write(html)
+                          win.document.close()
+                          setTimeout(() => win.print(), 500)
+                        }
+                      }}
+                      className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700"
+                    >
+                      <FileDown className="h-3 w-3" />
+                      Export PDF
+                    </button>
+                    <button
+                      onClick={() => handleDelete(sop.id)}
+                      className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      Delete
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
