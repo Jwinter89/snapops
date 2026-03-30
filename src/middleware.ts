@@ -20,6 +20,7 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 
 const LIMITS: Record<string, { max: number; windowMs: number }> = {
   '/api/generate': { max: 10, windowMs: 60000 },
+  '/api/demo': { max: 3, windowMs: 3600000 },
   '/api/stripe/checkout': { max: 5, windowMs: 60000 },
   '/api/auth': { max: 10, windowMs: 60000 },
 }

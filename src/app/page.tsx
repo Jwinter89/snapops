@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { FileText, Zap, Shield, ArrowRight, Check, Lock, Clock, Star, Building2 } from 'lucide-react'
+import LiveDemo from '@/components/LiveDemo'
 
 export default function Home() {
   return (
@@ -46,37 +47,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Live Demo Preview */}
-      <section className="max-w-4xl mx-auto px-6 pb-16">
-        <div className="rounded-xl border border-gray-200 shadow-lg overflow-hidden">
-          <div className="bg-gray-50 border-b border-gray-200 px-4 py-2 flex items-center gap-2">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-400" />
-              <div className="w-3 h-3 rounded-full bg-yellow-400" />
-              <div className="w-3 h-3 rounded-full bg-green-400" />
-            </div>
-            <span className="text-xs text-gray-500 ml-2">snapops.app/dashboard</span>
-          </div>
-          <div className="grid md:grid-cols-2 divide-x divide-gray-200">
-            <div className="p-6 bg-white">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Your notes</p>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Check oil level before starting pump. Make sure pressure gauge reads below 150 PSI. If alarm goes off shut down immediately and call supervisor. Log all readings in the daily book.
-              </p>
-            </div>
-            <div className="p-6 bg-white">
-              <p className="text-xs font-medium text-blue-600 uppercase tracking-wide mb-3">Generated SOP</p>
-              <p className="text-sm font-semibold text-gray-900 mb-2">Pump Pre-Start Safety Check</p>
-              <div className="space-y-1.5 text-sm text-gray-600">
-                <p><span className="font-medium text-gray-800">1.</span> Verify oil level between MIN/MAX marks</p>
-                <p><span className="font-medium text-gray-800">2.</span> Confirm pressure gauge reads below 150 PSI</p>
-                <p><span className="font-medium text-gray-800">3.</span> Proceed with normal startup sequence</p>
-                <p><span className="font-medium text-gray-800">4.</span> If alarm activates: IMMEDIATELY shut down</p>
-                <p><span className="font-medium text-gray-800">5.</span> Log all readings in daily operations book</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Live Demo */}
+      <section className="max-w-3xl mx-auto px-6 pb-16">
+        <LiveDemo />
       </section>
 
       {/* Social Proof / Stats */}
