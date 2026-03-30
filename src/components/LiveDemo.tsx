@@ -132,12 +132,7 @@ export default function LiveDemo() {
                   e.preventDefault()
                   setSendingEmail(true)
                   try {
-                    await fetch('/api/email/send-welcome', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ email: captureEmail }),
-                    })
-                    // Also trigger magic link signup
+                    // Trigger magic link signup — welcome email will be sent via Supabase webhook
                     const { createClient } = await import('@supabase/supabase-js')
                     const sb = createClient(
                       process.env.NEXT_PUBLIC_SUPABASE_URL!,

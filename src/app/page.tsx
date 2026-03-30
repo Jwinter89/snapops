@@ -121,6 +121,7 @@ export default function Home() {
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-12 text-center">
         <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={480} height={270} className="mx-auto mb-6 hidden sm:block" priority />
         <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={340} height={190} className="mx-auto mb-6 sm:hidden" priority />
+        <h1 className="sr-only">SnapOps — AI-Powered SOP Generator for Blue-Collar Workers</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Paste your rough notes or bullet points. Get a professional, formatted SOP in 30 seconds — with safety warnings, regulatory references, and step-by-step procedures.
         </p>
