@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import ReactMarkdown from 'react-markdown'
-import { Loader2, Copy, Download, Check } from 'lucide-react'
+import { Loader2, Copy, Download, Check, Share2 } from 'lucide-react'
 
 const INDUSTRIES = [
   'Oil & Gas', 'Construction', 'Manufacturing', 'Food Service',
@@ -154,9 +154,23 @@ export default function SOPGenerator({ onGenerated }: { onGenerated?: () => void
           <div className="prose prose-sm max-w-none text-gray-800">
             <ReactMarkdown>{result}</ReactMarkdown>
           </div>
-          <p className="mt-4 text-xs text-gray-400">
-            Made with SnapOps
-          </p>
+          <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+            <p className="text-xs text-gray-400">Made with SnapOps</p>
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({ title: 'SnapOps - AI SOP Generator', text: 'I just generated a professional SOP in 30 seconds with SnapOps. Try it free:', url: 'https://snapops.app' })
+                } else {
+                  navigator.clipboard.writeText('I just generated a professional SOP in 30 seconds with SnapOps. Try it free: https://snapops.app')
+                  alert('Share link copied!')
+                }
+              }}
+              className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700"
+            >
+              <Share2 className="h-3 w-3" />
+              Share SnapOps
+            </button>
+          </div>
         </div>
       )}
     </div>

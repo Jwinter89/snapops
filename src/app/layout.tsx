@@ -23,6 +23,13 @@ export const metadata: Metadata = {
     description: 'Turn messy notes into professional SOPs in seconds.',
   },
   metadataBase: new URL('https://snapops.app'),
+  manifest: '/manifest.json',
+  themeColor: '#2563eb',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'SnapOps',
+  },
 }
 
 export default function RootLayout({

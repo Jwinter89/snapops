@@ -5,6 +5,100 @@ import LiveDemo from '@/components/LiveDemo'
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "SnapOps",
+              "url": "https://snapops.app",
+              "description": "AI-powered SOP generator that turns messy notes into professional Standard Operating Procedures in 30 seconds",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Web",
+              "offers": [
+                {
+                  "@type": "Offer",
+                  "name": "Free",
+                  "price": "0",
+                  "priceCurrency": "USD"
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Pro",
+                  "price": "19",
+                  "priceCurrency": "USD",
+                  "billingIncrement": 1,
+                  "unitCode": "MON"
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Business",
+                  "price": "49",
+                  "priceCurrency": "USD",
+                  "billingIncrement": 1,
+                  "unitCode": "MON"
+                }
+              ]
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Is the AI-generated content accurate?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "SnapOps generates professional SOP formatting and structure. You should always review and customize the output for your specific workplace conditions, equipment, and regulations. The AI provides an excellent starting point that saves hours of formatting work."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is my data secure?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. All data is encrypted in transit (TLS 1.3) and at rest. We use Supabase with row-level security, meaning your SOPs are only accessible by your account. We never share your data with third parties. Payments are processed securely through Stripe."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I cancel anytime?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can cancel your subscription at any time from your billing dashboard. Your access continues until the end of your billing period. No cancellation fees, no questions asked."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What industries do you support?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "SnapOps supports 50+ industries including oil & gas, construction, manufacturing, healthcare, food service, and many more. See all industry templates at https://snapops.app/sop-templates."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do the SOPs meet regulatory standards?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "SnapOps generates SOPs with industry-appropriate structure including safety considerations, references to standards (OSHA, EPA, ISO, etc.), and proper formatting. However, you are responsible for ensuring your SOPs meet your specific regulatory requirements. Always have qualified personnel review SOPs before implementation."
+                  }
+                }
+              ]
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "SnapOps",
+              "url": "https://snapops.app",
+              "description": "AI-powered SOP generator that turns messy notes into professional Standard Operating Procedures in 30 seconds",
+              "logo": "https://snapops.app/icon.png"
+            }
+          ])
+        }}
+      />
       {/* Nav */}
       <nav className="border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
