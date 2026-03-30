@@ -89,10 +89,73 @@ export default function PrivacyPage() {
         <h2>10. International Data Transfers</h2>
         <p>Your data may be processed in the United States where our servers are located. By using the Service, you consent to this transfer.</p>
 
-        <h2>11. Changes to This Policy</h2>
+        <h2>11. European Users (GDPR)</h2>
+        <p>If you are located in the European Economic Area (EEA), United Kingdom, or Switzerland, the following additional rights and disclosures apply:</p>
+        <h3>Lawful Basis for Processing</h3>
+        <ul>
+          <li><strong>Contract performance:</strong> Processing your data to provide the Service (account creation, SOP generation, payment processing)</li>
+          <li><strong>Legitimate interests:</strong> Improving the Service, preventing fraud, ensuring security</li>
+          <li><strong>Consent:</strong> Marketing emails and optional analytics (you may withdraw consent at any time)</li>
+        </ul>
+        <h3>Additional Rights</h3>
+        <p>In addition to the rights listed in Section 7, you have the right to:</p>
+        <ul>
+          <li><strong>Object to processing:</strong> You may object to processing based on legitimate interests</li>
+          <li><strong>Restrict processing:</strong> You may request we limit how we use your data</li>
+          <li><strong>Data portability:</strong> Receive your data in a structured, machine-readable format</li>
+          <li><strong>Lodge a complaint:</strong> You may file a complaint with your local supervisory authority (data protection authority)</li>
+        </ul>
+        <h3>International Transfers</h3>
+        <p>Data transferred outside the EEA is protected by Standard Contractual Clauses (SCCs) approved by the European Commission, or other appropriate safeguards as required by GDPR.</p>
+
+        <h2>12. California Users (CCPA/CPRA)</h2>
+        <p>If you are a California resident, the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA) provide you with additional rights:</p>
+        <h3>Categories of Personal Information Collected</h3>
+        <table style={{borderCollapse: 'collapse', width: '100%', fontSize: '14px'}}>
+          <thead>
+            <tr style={{borderBottom: '2px solid #e5e7eb'}}>
+              <th style={{textAlign: 'left', padding: '8px'}}>Category</th>
+              <th style={{textAlign: 'left', padding: '8px'}}>Examples</th>
+              <th style={{textAlign: 'left', padding: '8px'}}>Sold?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{borderBottom: '1px solid #e5e7eb'}}>
+              <td style={{padding: '8px'}}>Identifiers</td>
+              <td style={{padding: '8px'}}>Email address</td>
+              <td style={{padding: '8px'}}>No</td>
+            </tr>
+            <tr style={{borderBottom: '1px solid #e5e7eb'}}>
+              <td style={{padding: '8px'}}>Commercial info</td>
+              <td style={{padding: '8px'}}>Subscription plan, payment history</td>
+              <td style={{padding: '8px'}}>No</td>
+            </tr>
+            <tr style={{borderBottom: '1px solid #e5e7eb'}}>
+              <td style={{padding: '8px'}}>Internet activity</td>
+              <td style={{padding: '8px'}}>Page views, feature usage</td>
+              <td style={{padding: '8px'}}>No</td>
+            </tr>
+            <tr>
+              <td style={{padding: '8px'}}>User content</td>
+              <td style={{padding: '8px'}}>SOP inputs and outputs</td>
+              <td style={{padding: '8px'}}>No</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Your California Rights</h3>
+        <ul>
+          <li><strong>Right to know:</strong> Request what personal information we collect, use, and disclose</li>
+          <li><strong>Right to delete:</strong> Request deletion of your personal information</li>
+          <li><strong>Right to opt out of sale:</strong> We do not sell your personal information. No action is needed.</li>
+          <li><strong>Right to non-discrimination:</strong> We will not discriminate against you for exercising your rights</li>
+          <li><strong>Right to correct:</strong> Request correction of inaccurate personal information</li>
+        </ul>
+        <p>To exercise these rights, contact us at privacy@snapops.app. We will respond within 45 days as required by law.</p>
+
+        <h2>13. Changes to This Policy</h2>
         <p>We may update this privacy policy. Material changes will be communicated via email. Continued use after changes constitutes acceptance.</p>
 
-        <h2>12. Contact</h2>
+        <h2>14. Contact</h2>
         <p>For privacy-related questions or data requests, contact us at privacy@snapops.app.</p>
       </main>
     </div>

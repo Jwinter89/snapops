@@ -3,6 +3,20 @@ import { generateSOP } from '@/lib/anthropic'
 
 export const dynamic = 'force-dynamic'
 
+const ALLOWED_INDUSTRIES = new Set([
+  'Oil & Gas', 'Construction', 'Manufacturing', 'Food Service',
+  'Healthcare Admin', 'Retail', 'Logistics', 'Agriculture',
+  'Auto Repair', 'Cleaning Services', 'Property Management', 'Warehousing',
+  'Mining', 'Electrical', 'Plumbing', 'HVAC', 'Landscaping', 'Pest Control',
+  'Roofing', 'Painting', 'Welding', 'Trucking', 'Aviation', 'Marine',
+  'Forestry', 'Water Treatment', 'Waste Management', 'Solar Energy',
+  'Wind Energy', 'Concrete', 'Demolition', 'Excavation', 'Fire Protection',
+  'Security Services', 'Janitorial', 'Catering', 'Bakery', 'Brewery',
+  'Distillery', 'Veterinary', 'Dental Office', 'Optometry', 'Pharmacy',
+  'Car Wash', 'Dry Cleaning', 'Printing', 'Photography', 'Event Planning',
+  'Moving Services', 'Storage Facilities', 'Other',
+])
+
 // Demo: 2 per hour per IP, no auth needed
 const demoLimits = new Map<string, { count: number; resetTime: number }>()
 
@@ -55,7 +69,8 @@ export async function POST(req: NextRequest) {
     }
 
     const trimmed = input.slice(0, 2000)
-    const content = await generateSOP(trimmed, industry)
+    const validIndustry = industry && ALLOWED_INDUSTRIES.has(industry) ? industry : undefined
+    const content = await generateSOP(trimmed, validIndustry)
     dailyDemoCount++
 
     return NextResponse.json({ content, remaining: 2 - (entry ? entry.count : 1) })

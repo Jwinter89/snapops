@@ -83,6 +83,63 @@ export async function sendDripDay3(to: string) {
   })
 }
 
+export async function sendPaymentFailedEmail(to: string) {
+  const resend = getResend()
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: 'Action required: your SnapOps payment failed',
+    headers: {
+      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+    },
+    html: `
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;padding:40px 20px;color:#1a1a1a;">
+  <div style="text-align:center;margin-bottom:32px;">
+    <span style="font-size:24px;font-weight:bold;color:#2563eb;">SnapOps</span>
+  </div>
+  <h1 style="font-size:22px;font-weight:600;margin-bottom:16px;">Your payment didn&rsquo;t go through</h1>
+  <p style="font-size:15px;line-height:1.6;color:#4a4a4a;">We tried to charge your card for your SnapOps subscription, but the payment failed. This usually happens when a card expires or has insufficient funds.</p>
+  <p style="font-size:15px;line-height:1.6;color:#4a4a4a;">Please update your payment method to keep your Pro features active. If we can&rsquo;t process payment after a few retries, your account will be downgraded to the free plan.</p>
+  <div style="text-align:center;margin:32px 0;">
+    <a href="https://snapops.app/dashboard" style="display:inline-block;background:#2563eb;color:white;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:500;font-size:15px;">Update Payment Method</a>
+  </div>
+  <p style="font-size:14px;color:#888;margin-top:32px;">— The SnapOps Team</p>
+  ${EMAIL_FOOTER}
+</body></html>`,
+  })
+}
+
+export async function sendCancellationEmail(to: string) {
+  const resend = getResend()
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: "Your SnapOps subscription has been cancelled",
+    headers: {
+      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+    },
+    html: `
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;padding:40px 20px;color:#1a1a1a;">
+  <div style="text-align:center;margin-bottom:32px;">
+    <span style="font-size:24px;font-weight:bold;color:#2563eb;">SnapOps</span>
+  </div>
+  <h1 style="font-size:22px;font-weight:600;margin-bottom:16px;">We&rsquo;re sorry to see you go</h1>
+  <p style="font-size:15px;line-height:1.6;color:#4a4a4a;">Your subscription has been cancelled and your account has been moved to the free plan (5 SOPs/month).</p>
+  <p style="font-size:15px;line-height:1.6;color:#4a4a4a;">Your existing SOPs are still saved and accessible. If you ever need unlimited generation or PDF export again, you can upgrade anytime from your dashboard.</p>
+  <p style="font-size:15px;line-height:1.6;color:#4a4a4a;">If you have a moment, we&rsquo;d love to know why you cancelled. Just reply to this email — it goes straight to a real person.</p>
+  <div style="text-align:center;margin:32px 0;">
+    <a href="https://snapops.app/dashboard" style="display:inline-block;background:#2563eb;color:white;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:500;font-size:15px;">Go to Dashboard</a>
+  </div>
+  <p style="font-size:14px;color:#888;margin-top:32px;">— The SnapOps Team</p>
+  ${EMAIL_FOOTER}
+</body></html>`,
+  })
+}
+
 export async function sendDripDay7(to: string) {
   const resend = getResend()
   await resend.emails.send({

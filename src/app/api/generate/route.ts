@@ -13,6 +13,20 @@ function getServiceClient() {
 
 const FREE_LIMIT = 5
 
+const ALLOWED_INDUSTRIES = new Set([
+  'Oil & Gas', 'Construction', 'Manufacturing', 'Food Service',
+  'Healthcare Admin', 'Retail', 'Logistics', 'Agriculture',
+  'Auto Repair', 'Cleaning Services', 'Property Management', 'Warehousing',
+  'Mining', 'Electrical', 'Plumbing', 'HVAC', 'Landscaping', 'Pest Control',
+  'Roofing', 'Painting', 'Welding', 'Trucking', 'Aviation', 'Marine',
+  'Forestry', 'Water Treatment', 'Waste Management', 'Solar Energy',
+  'Wind Energy', 'Concrete', 'Demolition', 'Excavation', 'Fire Protection',
+  'Security Services', 'Janitorial', 'Catering', 'Bakery', 'Brewery',
+  'Distillery', 'Veterinary', 'Dental Office', 'Optometry', 'Pharmacy',
+  'Car Wash', 'Dry Cleaning', 'Printing', 'Photography', 'Event Planning',
+  'Moving Services', 'Storage Facilities', 'Other',
+])
+
 export async function POST(req: NextRequest) {
   try {
     const authHeader = req.headers.get('authorization')
@@ -71,7 +85,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Input too long (max 10,000 characters)' }, { status: 400 })
     }
 
-    const content = await generateSOP(input, industry)
+    const validIndustry = industry && ALLOWED_INDUSTRIES.has(industry) ? industry : undefined
+    const content = await generateSOP(input, validIndustry)
 
     const titleMatch = content.match(/\*\*Title\*\*:\s*(.+?)(?:\n|$)/) ||
                        content.match(/^#\s+(.+?)(?:\n|$)/m)

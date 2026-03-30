@@ -16,7 +16,7 @@ export default function LiveDemo() {
   const [result, setResult] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [used, setUsed] = useState(false)
+  const [remaining, setRemaining] = useState<number | null>(null)
   const [captureEmail, setCaptureEmail] = useState('')
   const [emailSent, setEmailSent] = useState(false)
   const [sendingEmail, setSendingEmail] = useState(false)
@@ -45,7 +45,7 @@ export default function LiveDemo() {
       }
 
       setResult(data.content)
-      setUsed(true)
+      setRemaining(data.remaining ?? null)
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -177,7 +177,7 @@ export default function LiveDemo() {
               onClick={() => { setResult(''); setInput(''); setEmailSent(false); setCaptureEmail(''); }}
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              {used ? 'Try another (1 left)' : 'Try another'}
+              {remaining !== null && remaining > 0 ? `Try another (${remaining} left)` : remaining === 0 ? 'Demo limit reached' : 'Try another'}
             </button>
           </>
         )}

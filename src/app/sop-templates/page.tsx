@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FileText, ArrowRight, Search } from 'lucide-react'
 import type { Metadata } from 'next'
 import { industries } from './industries-data'
+import EmailCapture from '@/components/EmailCapture'
 
 export const metadata: Metadata = {
   title: 'SOP Templates by Industry | SnapOps - AI SOP Generator',
@@ -129,6 +130,11 @@ export default function SopTemplatesIndex() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Email Capture */}
+      <section className="max-w-xl mx-auto px-6 py-12">
+        <EmailCapture source="sop-templates" />
       </section>
 
       {/* CTA */}

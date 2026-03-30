@@ -85,7 +85,7 @@ export default function FreeSOPTemplate() {
             <div className="flex items-center gap-2 text-sm text-blue-800"><Check className="h-4 w-4 text-blue-600" /> Includes safety warnings you might miss</div>
             <div className="flex items-center gap-2 text-sm text-blue-800"><Check className="h-4 w-4 text-blue-600" /> 5 free SOPs every month, no credit card</div>
           </div>
-          <Link href="/" className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
+          <Link href="/#demo" className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
             Try the AI Generator Free <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

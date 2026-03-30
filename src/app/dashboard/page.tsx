@@ -124,6 +124,7 @@ export default function DashboardPage() {
             )}
             <button
               onClick={handleLogout}
+              aria-label="Log out"
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <LogOut className="h-4 w-4" />
@@ -133,6 +134,27 @@ export default function DashboardPage() {
       </nav>
 
       <main className="max-w-4xl mx-auto px-6 py-8 space-y-8">
+        {user?.plan === 'free' && (
+          <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">Monthly usage</span>
+              <span className="text-xs text-gray-500">{user.sops_this_month}/5 SOPs</span>
+            </div>
+            <div className="w-full bg-gray-100 rounded-full h-2">
+              <div
+                className={`h-2 rounded-full transition-all ${(user.sops_this_month ?? 0) >= 4 ? 'bg-orange-500' : 'bg-blue-600'}`}
+                style={{ width: `${Math.min(((user.sops_this_month ?? 0) / 5) * 100, 100)}%` }}
+              />
+            </div>
+            {(user.sops_this_month ?? 0) >= 4 && (
+              <p className="text-xs text-orange-600 mt-2">
+                {user.sops_this_month >= 5 ? 'Limit reached. ' : 'Almost at your limit. '}
+                <button onClick={() => handleUpgrade('pro')} className="underline font-medium">Upgrade to Pro</button> for unlimited SOPs.
+              </p>
+            )}
+          </div>
+        )}
+
         <SOPGenerator onGenerated={() => setRefreshKey(k => k + 1)} />
         <SOPList refreshKey={refreshKey} />
       </main>

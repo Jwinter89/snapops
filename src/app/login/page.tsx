@@ -41,24 +41,18 @@ export default function LoginPage() {
     setMessage('')
 
     if (isSignUp) {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { emailRedirectTo: `${window.location.origin}/dashboard` },
       })
       if (error) {
         setError(error.message)
+      } else if (data.session) {
+        router.push('/dashboard')
       } else {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (session) {
-          fetch('/api/email/send-welcome', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${session.access_token}` },
-          }).catch(() => {})
-          router.push('/dashboard')
-        } else {
-          router.push('/dashboard')
-        }
+        // Email confirmation required — don't push to dashboard
+        setMessage('Check your email to confirm your account, then sign in.')
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -182,6 +176,25 @@ export default function LoginPage() {
                 {isSignUp ? 'Log in' : 'Sign up'}
               </button>
             </p>
+
+            {!isSignUp && (
+              <p className="mt-2 text-center">
+                <button
+                  onClick={async () => {
+                    if (!email.trim()) { setError('Enter your email first, then click forgot password.'); return }
+                    setLoading(true); setError(''); setMessage('')
+                    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
+                      redirectTo: `${window.location.origin}/dashboard`,
+                    })
+                    if (resetErr) { setError(resetErr.message) } else { setMessage('Password reset link sent. Check your email.') }
+                    setLoading(false)
+                  }}
+                  className="text-xs text-gray-400 hover:text-gray-600"
+                >
+                  Forgot password?
+                </button>
+              </p>
+            )}
 
             <div className="mt-3 text-center">
               <button
