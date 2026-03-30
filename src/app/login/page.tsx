@@ -195,7 +195,12 @@ export default function LoginPage() {
         )}
       </div>
 
-      <div className="mt-6 flex items-center gap-4 text-xs text-gray-400">
+      <p className="mt-6 text-xs text-gray-400 text-center max-w-sm">
+        By signing up, you agree to our{' '}
+        <Link href="/terms" className="underline">Terms of Service</Link> and{' '}
+        <Link href="/privacy" className="underline">Privacy Policy</Link>.
+      </p>
+      <div className="mt-3 flex items-center gap-4 text-xs text-gray-400">
         <span>5 free SOPs/month</span>
         <span>No credit card</span>
         <span>Cancel anytime</span>

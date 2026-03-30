@@ -152,9 +152,15 @@ export default function SopTemplatesIndex() {
           <div className="flex gap-4">
             <Link href="/" className="hover:text-gray-700">Home</Link>
             <Link href="/sop-templates" className="hover:text-gray-700">All Templates</Link>
+            <Link href="/terms" className="hover:text-gray-700">Terms</Link>
+            <Link href="/privacy" className="hover:text-gray-700">Privacy</Link>
+            <Link href="/disclaimer" className="hover:text-gray-700">Disclaimer</Link>
             <Link href="/login" className="hover:text-gray-700">Log in</Link>
           </div>
         </div>
+        <p className="mt-4 max-w-5xl mx-auto px-6 text-center text-xs text-gray-400">
+          SnapOps is an AI-powered tool that assists with SOP creation. Generated content should be reviewed by qualified personnel before implementation. SnapOps does not provide legal, safety, or compliance advice.
+        </p>
       </footer>
     </div>
   )

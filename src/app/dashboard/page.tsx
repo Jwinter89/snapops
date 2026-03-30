@@ -139,6 +139,10 @@ export default function DashboardPage() {
 
       <footer className="border-t border-gray-100 py-6 mt-8">
         <p className="text-center text-xs text-gray-400">
+          AI-generated SOPs should be reviewed by qualified personnel before implementation. SnapOps does not provide legal, safety, or compliance advice.
+          {' '}<a href="/terms" className="underline">Terms</a> · <a href="/privacy" className="underline">Privacy</a> · <a href="/disclaimer" className="underline">Disclaimer</a>
+        </p>
+        <p className="mt-2 text-center text-xs text-gray-400">
           Developed by <a href="https://www.winterhowlers.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-600 underline">Winter Howlers</a>
         </p>
       </footer>

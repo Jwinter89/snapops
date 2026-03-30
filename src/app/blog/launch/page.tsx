@@ -99,7 +99,8 @@ export default function LaunchPost() {
         </div>
 
         <p className="mt-8 text-xs text-gray-400 text-center">
-          SnapOps is an AI-powered tool. Generated SOPs should be reviewed by qualified personnel before implementation.
+          SnapOps is an AI-powered tool. Generated SOPs should be reviewed by qualified personnel before implementation. SnapOps does not provide legal, safety, or compliance advice.
+          {' '}<Link href="/terms" className="underline">Terms</Link> · <Link href="/privacy" className="underline">Privacy</Link> · <Link href="/disclaimer" className="underline">Disclaimer</Link>
         </p>
       </article>
     </div>

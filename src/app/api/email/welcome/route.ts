@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendWelcomeEmail } from '@/lib/email'
+import { timingSafeEqual } from 'crypto'
 
 export const dynamic = 'force-dynamic'
+
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+}
 
 // Called by Supabase webhook on new user signup
 export async function POST(req: NextRequest) {
   try {
-    const authHeader = req.headers.get('authorization')
-    if (authHeader !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
+    const authHeader = req.headers.get('authorization') || ''
+    const expected = `Bearer ${process.env.WEBHOOK_SECRET}`
+    if (!safeCompare(authHeader, expected)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

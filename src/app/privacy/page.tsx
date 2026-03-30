@@ -63,6 +63,7 @@ export default function PrivacyPage() {
           <li><strong>Supabase:</strong> For data storage and authentication</li>
           <li><strong>Anthropic:</strong> For AI processing of SOP generation requests</li>
           <li><strong>Vercel:</strong> For hosting and anonymized analytics</li>
+          <li><strong>Resend:</strong> For transactional and marketing email delivery</li>
           <li><strong>Law enforcement:</strong> If required by law or valid legal process</li>
         </ul>
 

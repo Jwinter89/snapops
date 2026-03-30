@@ -4,8 +4,27 @@ import { Resend } from 'resend'
 
 export const dynamic = 'force-dynamic'
 
+// Per-IP rate limit for newsletter signup
+const newsletterLimits = new Map<string, { count: number; resetTime: number }>()
+
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: 3 signups per hour per IP
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    const now = Date.now()
+    const entry = newsletterLimits.get(ip)
+    if (entry && now < entry.resetTime) {
+      if (entry.count >= 3) {
+        return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+      }
+      entry.count++
+    } else {
+      newsletterLimits.set(ip, { count: 1, resetTime: now + 3600000 })
+    }
+    if (newsletterLimits.size > 5000) {
+      newsletterLimits.forEach((v, k) => { if (now > v.resetTime) newsletterLimits.delete(k) })
+    }
+
     const { email, source } = await req.json()
     if (!email || typeof email !== 'string' || !email.includes('@')) {
       return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
@@ -31,6 +50,9 @@ export async function POST(req: NextRequest) {
       from: process.env.EMAIL_FROM || 'SnapOps <hello@snapops.app>',
       to: email,
       subject: '5 SOP tips that save operations teams hours every week',
+      headers: {
+        'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+      },
       html: `
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -54,9 +76,13 @@ export async function POST(req: NextRequest) {
   <p style="font-size:14px;color:#888;margin-top:32px;">— The SnapOps Team</p>
   <hr style="border:none;border-top:1px solid #eee;margin:32px 0;">
   <p style="font-size:12px;color:#aaa;text-align:center;">
-    <a href="https://snapops.app" style="color:#aaa;">snapops.app</a> ·
-    <a href="https://snapops.app/terms" style="color:#aaa;">Terms</a> ·
+    <a href="https://snapops.app" style="color:#aaa;">snapops.app</a> &middot;
+    <a href="https://snapops.app/terms" style="color:#aaa;">Terms</a> &middot;
     <a href="https://snapops.app/privacy" style="color:#aaa;">Privacy</a>
+  </p>
+  <p style="font-size:11px;color:#bbb;text-align:center;margin-top:12px;">
+    SnapOps &middot; Made by Winter Howlers<br>
+    To stop receiving these emails, reply with "unsubscribe" or contact us at support@snapops.app.
   </p>
 </body></html>`,
     })

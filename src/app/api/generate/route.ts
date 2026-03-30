@@ -44,6 +44,24 @@ export async function POST(req: NextRequest) {
       }, { status: 429 })
     }
 
+    // Atomically increment count BEFORE generation to prevent race condition
+    if (profile?.plan === 'free') {
+      const { data: updated, error: incrError } = await supabase
+        .from('profiles')
+        .update({ sops_this_month: (profile?.sops_this_month ?? 0) + 1 })
+        .eq('id', user.id)
+        .lt('sops_this_month', FREE_LIMIT)
+        .select('sops_this_month')
+        .single()
+
+      if (incrError || !updated) {
+        return NextResponse.json({
+          error: 'Monthly limit reached. Upgrade to Pro for unlimited SOPs.',
+          upgrade: true,
+        }, { status: 429 })
+      }
+    }
+
     const { input, industry } = await req.json()
     if (!input || typeof input !== 'string' || input.trim().length === 0) {
       return NextResponse.json({ error: 'Input is required' }, { status: 400 })
@@ -76,11 +94,6 @@ export async function POST(req: NextRequest) {
       console.error('Insert error:', insertError)
       return NextResponse.json({ error: 'Failed to save SOP' }, { status: 500 })
     }
-
-    await supabase
-      .from('profiles')
-      .update({ sops_this_month: (profile?.sops_this_month ?? 0) + 1 })
-      .eq('id', user.id)
 
     return NextResponse.json({ sop })
   } catch (error) {

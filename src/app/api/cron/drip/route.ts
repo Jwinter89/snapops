@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendDripDay3, sendDripDay7 } from '@/lib/email'
+import { timingSafeEqual } from 'crypto'
 
 export const dynamic = 'force-dynamic'
+
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+}
 
 // Vercel Cron - runs daily at 9am UTC
 export async function GET(req: NextRequest) {
   // Verify cron secret
-  const authHeader = req.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const authHeader = req.headers.get('authorization') || ''
+  const expected = `Bearer ${process.env.CRON_SECRET}`
+  if (!safeCompare(authHeader, expected)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -39,7 +46,7 @@ export async function GET(req: NextRequest) {
         await sendDripDay3(user.email)
         sent++
       } catch (e) {
-        console.error('Drip day3 error:', user.email, e)
+        console.error('Drip day3 error:', e)
       }
     }
   }
@@ -58,7 +65,7 @@ export async function GET(req: NextRequest) {
         await sendDripDay7(user.email)
         sent++
       } catch (e) {
-        console.error('Drip day7 error:', user.email, e)
+        console.error('Drip day7 error:', e)
       }
     }
   }
