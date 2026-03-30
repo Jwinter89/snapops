@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { FileText, Zap, Shield, ArrowRight, Check, Lock, Clock, Star, Building2 } from 'lucide-react'
 import LiveDemo from '@/components/LiveDemo'
 
@@ -117,7 +118,8 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
+      <section className="max-w-5xl mx-auto px-6 pt-12 pb-16 text-center">
+        <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={500} height={280} className="mx-auto mb-8 rounded-lg" priority />
         <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-4 py-1.5 text-sm text-orange-700 mb-6">
           <Star className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
           AI-Powered SOPs for Blue-Collar Workers
