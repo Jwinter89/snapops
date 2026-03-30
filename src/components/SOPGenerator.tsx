@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import ReactMarkdown from 'react-markdown'
-import Link from 'next/link'
 import { Loader2, Copy, Download, Check, Share2, ArrowRight } from 'lucide-react'
 
 const INDUSTRIES = [
