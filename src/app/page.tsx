@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { FileText, Zap, Shield, ArrowRight, Check, Lock, Clock, Star, Building2 } from 'lucide-react'
+import { FileText, Zap, Shield, ArrowRight, Check, Lock, Clock, Building2 } from 'lucide-react'
 import LiveDemo from '@/components/LiveDemo'
 
 export default function Home() {
@@ -118,32 +118,29 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-12 pb-16 text-center">
-        <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={500} height={280} className="mx-auto mb-8 rounded-lg" priority />
-        <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-4 py-1.5 text-sm text-orange-700 mb-6">
-          <Star className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
-          AI-Powered SOPs for Blue-Collar Workers
-        </div>
-        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight max-w-3xl mx-auto">
-          Turn messy notes into professional SOPs in seconds
-        </h1>
-        <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
-          Paste your bullet points, voice notes, or rough process descriptions.
-          SnapOps transforms them into clear, formatted Standard Operating Procedures — instantly.
+      <section className="max-w-5xl mx-auto px-6 pt-8 pb-12 text-center">
+        <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={480} height={270} className="mx-auto mb-6 hidden sm:block" priority />
+        <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={340} height={190} className="mx-auto mb-6 sm:hidden" priority />
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Paste your rough notes or bullet points. Get a professional, formatted SOP in 30 seconds — with safety warnings, regulatory references, and step-by-step procedures.
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/login" className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-colors flex items-center gap-2">
-            Start Free — No Credit Card <ArrowRight className="h-4 w-4" />
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link href="#demo" className="rounded-lg bg-orange-500 px-6 py-3 text-sm font-medium text-white hover:bg-orange-600 transition-colors flex items-center gap-2">
+            Try It Free — No Signup <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900">
+            or create an account
           </Link>
         </div>
         <div className="mt-4 flex items-center justify-center gap-6 text-xs text-gray-500">
-          <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> 256-bit encryption</span>
-          <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> SOPs in 30 seconds</span>
-          <span className="flex items-center gap-1"><Shield className="h-3 w-3" /> SOC 2 compliant infra</span>
+          <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> Encrypted</span>
+          <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> 30 second generation</span>
+          <span className="flex items-center gap-1"><Shield className="h-3 w-3" /> 50+ industries</span>
         </div>
       </section>
 
       {/* Live Demo */}
+      <div id="demo" />
       <section className="max-w-3xl mx-auto px-6 pb-16">
         <LiveDemo />
       </section>
