@@ -37,6 +37,7 @@ export async function GET(req: NextRequest) {
     .from('profiles')
     .select('email')
     .eq('plan', 'free')
+    .neq('email_opt_out', true)
     .gte('created_at', day3Window)
     .lte('created_at', day3Ago)
 
@@ -56,6 +57,7 @@ export async function GET(req: NextRequest) {
     .from('profiles')
     .select('email')
     .eq('plan', 'free')
+    .neq('email_opt_out', true)
     .gte('created_at', day7Window)
     .lte('created_at', day7Ago)
 

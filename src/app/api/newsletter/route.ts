@@ -1,28 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import { rateLimit } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
-// Per-IP rate limit for newsletter signup
-const newsletterLimits = new Map<string, { count: number; resetTime: number }>()
-
 export async function POST(req: NextRequest) {
   try {
-    // Rate limit: 3 signups per hour per IP
+    // Rate limit: 3 signups per hour per IP (persists with Redis)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-    const now = Date.now()
-    const entry = newsletterLimits.get(ip)
-    if (entry && now < entry.resetTime) {
-      if (entry.count >= 3) {
-        return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
-      }
-      entry.count++
-    } else {
-      newsletterLimits.set(ip, { count: 1, resetTime: now + 3600000 })
-    }
-    if (newsletterLimits.size > 5000) {
-      newsletterLimits.forEach((v, k) => { if (now > v.resetTime) newsletterLimits.delete(k) })
+    const { success } = await rateLimit(`newsletter:${ip}`, 3, 3600000)
+    if (!success) {
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
 
     const { email, source } = await req.json()
@@ -35,10 +24,15 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    // Save to newsletter table
+    // Save to newsletter table (re-subscribe if previously unsubscribed)
     const { error } = await supabase
       .from('newsletter')
-      .upsert({ email: email.toLowerCase().trim(), source: source || 'website' }, { onConflict: 'email' })
+      .upsert({
+        email: email.toLowerCase().trim(),
+        source: source || 'website',
+        unsubscribed: false,
+        unsubscribed_at: null,
+      }, { onConflict: 'email' })
 
     if (error) {
       console.error('Newsletter signup error:', error)
@@ -51,7 +45,8 @@ export async function POST(req: NextRequest) {
       to: email,
       subject: '5 SOP tips that save operations teams hours every week',
       headers: {
-        'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+        'List-Unsubscribe': `<https://snapops.app/api/unsubscribe?email=${encodeURIComponent(email)}>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
       },
       html: `
 <!DOCTYPE html>
@@ -82,7 +77,7 @@ export async function POST(req: NextRequest) {
   </p>
   <p style="font-size:11px;color:#bbb;text-align:center;margin-top:12px;">
     SnapOps &middot; Made by Winter Howlers<br>
-    To stop receiving these emails, reply with "unsubscribe" or contact us at support@snapops.app.
+    To stop receiving these emails, <a href="https://snapops.app/api/unsubscribe" style="color:#bbb;">unsubscribe here</a> or contact us at support@snapops.app.
   </p>
 </body></html>`,
     })

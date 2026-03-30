@@ -16,15 +16,6 @@ const BLOCKED_COUNTRIES = new Set([
   'IR', // Iran
 ])
 
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-
-const LIMITS: Record<string, { max: number; windowMs: number }> = {
-  '/api/generate': { max: 10, windowMs: 60000 },
-  '/api/demo': { max: 3, windowMs: 3600000 },
-  '/api/stripe/checkout': { max: 5, windowMs: 60000 },
-  '/api/auth': { max: 10, windowMs: 60000 },
-}
-
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
@@ -43,35 +34,9 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Rate limiting on API routes
-  for (const [prefix, limit] of Object.entries(LIMITS)) {
-    if (path.startsWith(prefix)) {
-      const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-      const key = `${ip}:${prefix}`
-      const now = Date.now()
-      const entry = rateLimitMap.get(key)
-
-      if (entry && now < entry.resetTime) {
-        if (entry.count >= limit.max) {
-          return NextResponse.json(
-            { error: 'Too many requests. Please try again later.' },
-            { status: 429 }
-          )
-        }
-        entry.count++
-      } else {
-        rateLimitMap.set(key, { count: 1, resetTime: now + limit.windowMs })
-      }
-
-      // Cleanup old entries periodically
-      if (rateLimitMap.size > 10000) {
-        rateLimitMap.forEach((v, k) => {
-          if (now > v.resetTime) rateLimitMap.delete(k)
-        })
-      }
-      break
-    }
-  }
+  // Rate limiting is handled per-route using Upstash Redis (see src/lib/rate-limit.ts).
+  // Middleware only handles geo-blocking since Edge runtime can't use dynamic imports
+  // required by Upstash SDK.
 
   return NextResponse.next()
 }

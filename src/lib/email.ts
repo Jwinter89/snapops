@@ -16,7 +16,7 @@ const EMAIL_FOOTER = `
   </p>
   <p style="font-size:11px;color:#bbb;text-align:center;margin-top:12px;">
     SnapOps &middot; Made by Winter Howlers<br>
-    To stop receiving these emails, reply with "unsubscribe" or contact us at support@snapops.app.
+    To stop receiving these emails, <a href="https://snapops.app/api/unsubscribe" style="color:#bbb;">unsubscribe here</a> or contact us at support@snapops.app.
   </p>`
 
 export async function sendWelcomeEmail(to: string) {
@@ -26,7 +26,8 @@ export async function sendWelcomeEmail(to: string) {
     to,
     subject: 'Welcome to SnapOps — your first SOP is waiting',
     headers: {
-      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+      'List-Unsubscribe': `<https://snapops.app/api/unsubscribe?email=${encodeURIComponent(to)}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
     html: `
 <!DOCTYPE html>
@@ -61,7 +62,8 @@ export async function sendDripDay3(to: string) {
     to,
     subject: 'Pro tip: try selecting an industry for better SOPs',
     headers: {
-      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+      'List-Unsubscribe': `<https://snapops.app/api/unsubscribe?email=${encodeURIComponent(to)}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
     html: `
 <!DOCTYPE html>
@@ -90,7 +92,8 @@ export async function sendPaymentFailedEmail(to: string) {
     to,
     subject: 'Action required: your SnapOps payment failed',
     headers: {
-      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+      'List-Unsubscribe': `<https://snapops.app/api/unsubscribe?email=${encodeURIComponent(to)}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
     html: `
 <!DOCTYPE html>
@@ -118,7 +121,8 @@ export async function sendCancellationEmail(to: string) {
     to,
     subject: "Your SnapOps subscription has been cancelled",
     headers: {
-      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+      'List-Unsubscribe': `<https://snapops.app/api/unsubscribe?email=${encodeURIComponent(to)}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
     html: `
 <!DOCTYPE html>
@@ -147,7 +151,8 @@ export async function sendDripDay7(to: string) {
     to,
     subject: "You've been using SnapOps for a week — here's what Pro unlocks",
     headers: {
-      'List-Unsubscribe': '<mailto:support@snapops.app?subject=Unsubscribe>',
+      'List-Unsubscribe': `<https://snapops.app/api/unsubscribe?email=${encodeURIComponent(to)}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
     },
     html: `
 <!DOCTYPE html>

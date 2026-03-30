@@ -13,6 +13,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
   const [upgrading, setUpgrading] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -83,6 +85,25 @@ export default function DashboardPage() {
   async function handleLogout() {
     await supabase.auth.signOut()
     router.push('/')
+  }
+
+  async function handleDeleteAccount() {
+    setDeleting(true)
+    const token = await getAccessToken()
+    if (!token) { setDeleting(false); return }
+
+    try {
+      const res = await fetch('/api/account/delete', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+      })
+      if (res.ok) {
+        await supabase.auth.signOut()
+        router.push('/')
+      }
+    } catch {
+      setDeleting(false)
+    }
   }
 
   if (loading) {
@@ -167,6 +188,33 @@ export default function DashboardPage() {
         <p className="mt-2 text-center text-xs text-gray-400">
           Developed by <a href="https://www.winterhowlers.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-600 underline">Winter Howlers</a>
         </p>
+        <div className="mt-4 text-center">
+          {showDeleteConfirm ? (
+            <div className="inline-flex items-center gap-3 rounded-lg bg-red-50 border border-red-200 px-4 py-2">
+              <span className="text-xs text-red-700">Permanently delete your account and all SOPs?</span>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleting}
+                className="text-xs font-medium text-red-600 hover:text-red-700 disabled:text-red-300"
+              >
+                {deleting ? 'Deleting...' : 'Yes, delete everything'}
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+            >
+              Delete account
+            </button>
+          )}
+        </div>
       </footer>
     </div>
   )

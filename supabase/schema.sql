@@ -6,6 +6,7 @@ create table if not exists public.profiles (
   sops_this_month integer not null default 0,
   stripe_customer_id text,
   stripe_subscription_id text,
+  email_opt_out boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -21,6 +22,16 @@ create table if not exists public.sops (
   tags text[] default '{}',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
+);
+
+-- Newsletter subscribers
+create table if not exists public.newsletter (
+  id uuid default gen_random_uuid() primary key,
+  email text unique not null,
+  source text default 'website',
+  unsubscribed boolean not null default false,
+  unsubscribed_at timestamptz,
+  created_at timestamptz not null default now()
 );
 
 -- Indexes
