@@ -3,6 +3,7 @@ import { FileText, ArrowRight, Check, MapPin } from 'lucide-react'
 import { cities } from '../cities-data'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import EmailCapture from '@/components/EmailCapture'
 
 interface Props {
   params: { city: string }
@@ -122,6 +123,10 @@ export default function CityPage({ params }: Props) {
           <Link href="/login" className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors">
             Get Started Free <ArrowRight className="h-4 w-4" />
           </Link>
+        </div>
+
+        <div className="mb-8">
+          <EmailCapture source={`city-${city.slug}`} />
         </div>
 
         <p className="text-xs text-gray-400 text-center">

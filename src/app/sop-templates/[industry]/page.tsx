@@ -3,6 +3,7 @@ import { FileText, ArrowRight, ClipboardList, BookOpen, CheckCircle } from 'luci
 import type { Metadata } from 'next'
 import { industries } from '../industries-data'
 import { notFound } from 'next/navigation'
+import EmailCapture from '@/components/EmailCapture'
 
 interface PageProps {
   params: { industry: string }
@@ -152,6 +153,10 @@ export default function IndustryPage({ params }: PageProps) {
       </section>
 
       {/* Footer */}
+      <section className="max-w-4xl mx-auto px-6 py-8">
+        <EmailCapture source={`sop-templates-${params.industry}`} />
+      </section>
+
       <footer className="border-t border-gray-100 py-8">
         <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-500 gap-4">
           <span>SnapOps &mdash; AI-powered SOPs for every team.</span>
