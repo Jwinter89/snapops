@@ -231,20 +231,20 @@ export default function Home() {
 
       {/* Use Cases */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">Who uses SnapOps?</h2>
-        <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">Teams that need documented procedures but don&apos;t have time to write them from scratch.</p>
+        <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">Built for people who know the work but hate the paperwork</h2>
+        <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">If you&apos;ve ever thought &ldquo;I know this procedure cold, I just don&apos;t have time to write it out&rdquo; — SnapOps is for you.</p>
         <div className="grid md:grid-cols-3 gap-6">
           <div className="rounded-xl border border-gray-200 p-5">
             <p className="text-sm font-semibold text-gray-900 mb-2">Safety Managers</p>
-            <p className="text-sm text-gray-600">&ldquo;I used to spend 2-3 hours per SOP. Now I paste my field notes and have a complete procedure in 30 seconds.&rdquo;</p>
+            <p className="text-sm text-gray-600">Turn field notes and JSAs into formatted SOPs with proper safety warnings and regulatory references. Stop spending hours in Word.</p>
           </div>
           <div className="rounded-xl border border-gray-200 p-5">
             <p className="text-sm font-semibold text-gray-900 mb-2">Operations Directors</p>
-            <p className="text-sm text-gray-600">&ldquo;We went from 12 documented procedures to over 100 in two weeks. Our ISO audit went smoothly for the first time.&rdquo;</p>
+            <p className="text-sm text-gray-600">Build your company&apos;s SOP library fast. Go from a handful of documented procedures to full coverage. Be ready when the auditor walks in.</p>
           </div>
           <div className="rounded-xl border border-gray-200 p-5">
             <p className="text-sm font-semibold text-gray-900 mb-2">Small Business Owners</p>
-            <p className="text-sm text-gray-600">&ldquo;Finally, a way to get procedures out of my head and into a format my team can actually follow.&rdquo;</p>
+            <p className="text-sm text-gray-600">Get procedures out of your head and into a format your team can follow. Train new hires faster. Reduce mistakes when you&apos;re not there.</p>
           </div>
         </div>
       </section>
