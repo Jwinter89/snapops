@@ -118,9 +118,9 @@ export default function Home() {
 
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-100 px-4 py-1.5 text-sm text-blue-700 mb-6">
-          <Star className="h-3.5 w-3.5 fill-blue-500 text-blue-500" />
-          Trusted by teams across 50+ industries
+        <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-4 py-1.5 text-sm text-orange-700 mb-6">
+          <Star className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
+          AI-Powered SOPs for Blue-Collar Workers
         </div>
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight max-w-3xl mx-auto">
           Turn messy notes into professional SOPs in seconds
