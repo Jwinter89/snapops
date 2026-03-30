@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FileText, ArrowRight, Search } from 'lucide-react'
 import type { Metadata } from 'next'
 import { industries } from './industries-data'
+import EmailCapture from '@/components/EmailCapture'
 
 export const metadata: Metadata = {
   title: 'SOP Templates by Industry | SnapOps - AI SOP Generator',
@@ -131,6 +132,11 @@ export default function SopTemplatesIndex() {
         </div>
       </section>
 
+      {/* Email Capture */}
+      <section className="max-w-xl mx-auto px-6 py-12">
+        <EmailCapture source="sop-templates" />
+      </section>
+
       {/* CTA */}
       <section className="max-w-5xl mx-auto px-6 py-16 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -152,9 +158,15 @@ export default function SopTemplatesIndex() {
           <div className="flex gap-4">
             <Link href="/" className="hover:text-gray-700">Home</Link>
             <Link href="/sop-templates" className="hover:text-gray-700">All Templates</Link>
+            <Link href="/terms" className="hover:text-gray-700">Terms</Link>
+            <Link href="/privacy" className="hover:text-gray-700">Privacy</Link>
+            <Link href="/disclaimer" className="hover:text-gray-700">Disclaimer</Link>
             <Link href="/login" className="hover:text-gray-700">Log in</Link>
           </div>
         </div>
+        <p className="mt-4 max-w-5xl mx-auto px-6 text-center text-xs text-gray-400">
+          SnapOps is an AI-powered tool that assists with SOP creation. Generated content should be reviewed by qualified personnel before implementation. SnapOps does not provide legal, safety, or compliance advice.
+        </p>
       </footer>
     </div>
   )

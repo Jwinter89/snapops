@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { SOP } from '@/lib/types'
 import ReactMarkdown from 'react-markdown'
-import { ChevronDown, ChevronUp, Trash2, Search, FileDown } from 'lucide-react'
+import { ChevronDown, ChevronUp, Trash2, Search, FileDown, ArrowRight } from 'lucide-react'
 
 export default function SOPList({ refreshKey }: { refreshKey: number }) {
   const [sops, setSops] = useState<SOP[]>([])
   const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const [upgradePromptId, setUpgradePromptId] = useState<string | null>(null)
 
   useEffect(() => {
     loadSOPs()
@@ -32,6 +34,7 @@ export default function SOPList({ refreshKey }: { refreshKey: number }) {
   async function handleDelete(id: string) {
     await supabase.from('sops').delete().eq('id', id)
     setSops(sops.filter(s => s.id !== id))
+    setDeleteConfirm(null)
   }
 
   const filtered = sops.filter(s =>
@@ -95,16 +98,32 @@ export default function SOPList({ refreshKey }: { refreshKey: number }) {
                   <div className="prose prose-sm max-w-none text-gray-800 mb-4">
                     <ReactMarkdown>{sop.content}</ReactMarkdown>
                   </div>
+                  {upgradePromptId === sop.id && (
+                    <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 p-3 flex items-center justify-between">
+                      <p className="text-sm text-blue-700">PDF export requires a Pro plan.</p>
+                      <button
+                        onClick={() => {
+                          const upgradeEvent = new CustomEvent('snapops:upgrade', { detail: { plan: 'pro' } })
+                          window.dispatchEvent(upgradeEvent)
+                        }}
+                        className="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 transition-colors"
+                      >
+                        Upgrade to Pro <ArrowRight className="h-3 w-3" />
+                      </button>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-4">
                     <button
                       onClick={async () => {
+                        setUpgradePromptId(null)
                         const { data: { session } } = await supabase.auth.getSession()
                         if (!session) return
                         const res = await fetch(`/api/export-pdf?id=${sop.id}`, {
                           headers: { 'Authorization': `Bearer ${session.access_token}` },
                         })
                         if (res.status === 403) {
-                          alert('PDF export requires a Pro plan. Upgrade from your dashboard.')
+                          setUpgradePromptId(sop.id)
                           return
                         }
                         const html = await res.text()
@@ -120,13 +139,22 @@ export default function SOPList({ refreshKey }: { refreshKey: number }) {
                       <FileDown className="h-3 w-3" />
                       Export PDF
                     </button>
-                    <button
-                      onClick={() => handleDelete(sop.id)}
-                      className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                      Delete
-                    </button>
+
+                    {deleteConfirm === sop.id ? (
+                      <span className="flex items-center gap-2 text-xs">
+                        <span className="text-gray-600">Delete this SOP?</span>
+                        <button onClick={() => handleDelete(sop.id)} className="text-red-600 font-medium hover:text-red-700">Yes, delete</button>
+                        <button onClick={() => setDeleteConfirm(null)} className="text-gray-500 hover:text-gray-700">Cancel</button>
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => setDeleteConfirm(sop.id)}
+                        className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               )}

@@ -13,6 +13,20 @@ function getServiceClient() {
 
 const FREE_LIMIT = 5
 
+const ALLOWED_INDUSTRIES = new Set([
+  'Oil & Gas', 'Construction', 'Manufacturing', 'Food Service',
+  'Healthcare Admin', 'Retail', 'Logistics', 'Agriculture',
+  'Auto Repair', 'Cleaning Services', 'Property Management', 'Warehousing',
+  'Mining', 'Electrical', 'Plumbing', 'HVAC', 'Landscaping', 'Pest Control',
+  'Roofing', 'Painting', 'Welding', 'Trucking', 'Aviation', 'Marine',
+  'Forestry', 'Water Treatment', 'Waste Management', 'Solar Energy',
+  'Wind Energy', 'Concrete', 'Demolition', 'Excavation', 'Fire Protection',
+  'Security Services', 'Janitorial', 'Catering', 'Bakery', 'Brewery',
+  'Distillery', 'Veterinary', 'Dental Office', 'Optometry', 'Pharmacy',
+  'Car Wash', 'Dry Cleaning', 'Printing', 'Photography', 'Event Planning',
+  'Moving Services', 'Storage Facilities', 'Other',
+])
+
 export async function POST(req: NextRequest) {
   try {
     const authHeader = req.headers.get('authorization')
@@ -44,6 +58,24 @@ export async function POST(req: NextRequest) {
       }, { status: 429 })
     }
 
+    // Atomically increment count BEFORE generation to prevent race condition
+    if (profile?.plan === 'free') {
+      const { data: updated, error: incrError } = await supabase
+        .from('profiles')
+        .update({ sops_this_month: (profile?.sops_this_month ?? 0) + 1 })
+        .eq('id', user.id)
+        .lt('sops_this_month', FREE_LIMIT)
+        .select('sops_this_month')
+        .single()
+
+      if (incrError || !updated) {
+        return NextResponse.json({
+          error: 'Monthly limit reached. Upgrade to Pro for unlimited SOPs.',
+          upgrade: true,
+        }, { status: 429 })
+      }
+    }
+
     const { input, industry } = await req.json()
     if (!input || typeof input !== 'string' || input.trim().length === 0) {
       return NextResponse.json({ error: 'Input is required' }, { status: 400 })
@@ -53,7 +85,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Input too long (max 10,000 characters)' }, { status: 400 })
     }
 
-    const content = await generateSOP(input, industry)
+    const validIndustry = industry && ALLOWED_INDUSTRIES.has(industry) ? industry : undefined
+    const content = await generateSOP(input, validIndustry)
 
     const titleMatch = content.match(/\*\*Title\*\*:\s*(.+?)(?:\n|$)/) ||
                        content.match(/^#\s+(.+?)(?:\n|$)/m)
@@ -76,11 +109,6 @@ export async function POST(req: NextRequest) {
       console.error('Insert error:', insertError)
       return NextResponse.json({ error: 'Failed to save SOP' }, { status: 500 })
     }
-
-    await supabase
-      .from('profiles')
-      .update({ sops_this_month: (profile?.sops_this_month ?? 0) + 1 })
-      .eq('id', user.id)
 
     return NextResponse.json({ sop })
   } catch (error) {

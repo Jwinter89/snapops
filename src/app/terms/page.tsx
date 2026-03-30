@@ -83,13 +83,34 @@ export default function TermsPage() {
         <h2>13. Termination</h2>
         <p>We may terminate or suspend your account for violations of these terms. You may delete your account at any time by contacting us.</p>
 
-        <h2>14. Governing Law</h2>
-        <p>These terms are governed by the laws of the United States. Any disputes shall be resolved in the courts of the state where the company is registered.</p>
+        <h2>14. Warranty Disclaimer</h2>
+        <p><strong>THE SERVICE IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE&rdquo; WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. SNAPOPS DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR SECURE, OR THAT ANY DEFECTS WILL BE CORRECTED. AI-GENERATED CONTENT IS PROVIDED WITHOUT ANY WARRANTY OF ACCURACY, COMPLETENESS, OR SUITABILITY FOR ANY PURPOSE.</strong></p>
 
-        <h2>15. Changes to Terms</h2>
+        <h2>15. Dispute Resolution & Arbitration</h2>
+        <p>Any dispute arising out of or relating to these Terms or the Service shall be resolved through binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules. Arbitration shall take place in the State of Wyoming. <strong>YOU AGREE TO WAIVE YOUR RIGHT TO A JURY TRIAL AND TO PARTICIPATE IN A CLASS ACTION LAWSUIT OR CLASS-WIDE ARBITRATION.</strong> Each party shall bear its own arbitration costs. Small claims court actions are exempt from this arbitration requirement.</p>
+
+        <h2>16. Severability</h2>
+        <p>If any provision of these Terms is found to be unenforceable or invalid by a court of competent jurisdiction, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect.</p>
+
+        <h2>17. Force Majeure</h2>
+        <p>SnapOps shall not be liable for any failure or delay in performing its obligations under these Terms due to circumstances beyond its reasonable control, including but not limited to natural disasters, war, terrorism, pandemics, government actions, power outages, internet disruptions, or third-party service provider failures.</p>
+
+        <h2>18. Age Requirement</h2>
+        <p>You must be at least 18 years old to use the Service. By creating an account, you represent and warrant that you are at least 18 years of age. If we learn that a user is under 18, we will terminate their account immediately.</p>
+
+        <h2>19. Assignment</h2>
+        <p>You may not assign or transfer your rights under these Terms without our prior written consent. We may assign our rights and obligations under these Terms without restriction.</p>
+
+        <h2>20. Entire Agreement</h2>
+        <p>These Terms, together with the Privacy Policy and any other agreements referenced herein, constitute the entire agreement between you and SnapOps regarding the Service and supersede all prior agreements and understandings.</p>
+
+        <h2>21. Governing Law</h2>
+        <p>These Terms are governed by and construed in accordance with the laws of the State of Wyoming, without regard to its conflict of law principles.</p>
+
+        <h2>22. Changes to Terms</h2>
         <p>We may update these terms at any time. Continued use of the Service after changes constitutes acceptance of the new terms. Material changes will be communicated via email.</p>
 
-        <h2>16. Contact</h2>
+        <h2>23. Contact</h2>
         <p>For questions about these terms, contact us at support@snapops.app.</p>
       </main>
     </div>

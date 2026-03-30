@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import Stripe from 'stripe'
+import { sendPaymentFailedEmail, sendCancellationEmail } from '@/lib/email'
 
 export const dynamic = 'force-dynamic'
 
@@ -81,17 +82,25 @@ export async function POST(req: NextRequest) {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('id')
+        .select('id, email')
         .eq('stripe_customer_id', customerId)
         .single()
 
-      if (profile && subscription.status === 'active') {
-        const priceId = subscription.items.data[0]?.price?.id
-        const plan = priceId === process.env.STRIPE_BUSINESS_PRICE_ID ? 'business' : 'pro'
-        await supabase
-          .from('profiles')
-          .update({ plan, stripe_subscription_id: subscription.id })
-          .eq('id', profile.id)
+      if (profile) {
+        if (subscription.status === 'active') {
+          const priceId = subscription.items.data[0]?.price?.id
+          const plan = priceId === process.env.STRIPE_BUSINESS_PRICE_ID ? 'business' : 'pro'
+          await supabase
+            .from('profiles')
+            .update({ plan, stripe_subscription_id: subscription.id })
+            .eq('id', profile.id)
+        } else if (subscription.status === 'past_due') {
+          // Downgrade to free on past_due to prevent abuse
+          await supabase
+            .from('profiles')
+            .update({ plan: 'free' })
+            .eq('id', profile.id)
+        }
       }
       break
     }
@@ -100,10 +109,36 @@ export async function POST(req: NextRequest) {
       const subscription = event.data.object as Stripe.Subscription
       const customerId = subscription.customer as string
 
+      const { data: cancelledProfile } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('stripe_customer_id', customerId)
+        .single()
+
       await supabase
         .from('profiles')
         .update({ plan: 'free', stripe_subscription_id: null })
         .eq('stripe_customer_id', customerId)
+
+      if (cancelledProfile?.email) {
+        await sendCancellationEmail(cancelledProfile.email).catch(() => {})
+      }
+      break
+    }
+
+    case 'invoice.payment_failed': {
+      const invoice = event.data.object as Stripe.Invoice
+      const customerId = invoice.customer as string
+
+      const { data: failedProfile } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('stripe_customer_id', customerId)
+        .single()
+
+      if (failedProfile?.email) {
+        await sendPaymentFailedEmail(failedProfile.email).catch(() => {})
+      }
       break
     }
   }

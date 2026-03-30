@@ -121,6 +121,7 @@ export default function Home() {
       <section className="max-w-5xl mx-auto px-6 pt-8 pb-12 text-center">
         <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={480} height={270} className="mx-auto mb-6 hidden sm:block" priority />
         <Image src="/hero.png" alt="SnapOps — AI-Powered SOPs for Blue-Collar Workers" width={340} height={190} className="mx-auto mb-6 sm:hidden" priority />
+        <h1 className="sr-only">SnapOps — AI-Powered SOP Generator for Blue-Collar Workers</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Paste your rough notes or bullet points. Get a professional, formatted SOP in 30 seconds — with safety warnings, regulatory references, and step-by-step procedures.
         </p>
@@ -262,7 +263,7 @@ export default function Home() {
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> 5 SOPs per month</li>
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> SOP library</li>
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Markdown export</li>
-                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> 12 industry templates</li>
+                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> 50+ industry templates</li>
               </ul>
               <Link href="/login" className="mt-6 block text-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                 Get Started
@@ -281,7 +282,7 @@ export default function Home() {
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Priority generation</li>
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Email support</li>
               </ul>
-              <Link href="/login" className="mt-6 block text-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
+              <Link href="/login?plan=pro" className="mt-6 block text-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
                 Start Pro
               </Link>
             </div>
@@ -292,12 +293,12 @@ export default function Home() {
               <p className="text-xs text-gray-500 mt-1">For larger teams</p>
               <ul className="mt-6 space-y-3">
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Everything in Pro</li>
-                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Custom branding</li>
-                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> API access</li>
-                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Bulk import</li>
+                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Custom branding <span className="text-xs text-gray-400">(coming soon)</span></li>
+                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> API access <span className="text-xs text-gray-400">(coming soon)</span></li>
+                <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Bulk import <span className="text-xs text-gray-400">(coming soon)</span></li>
                 <li className="flex items-center gap-2 text-sm text-gray-600"><Check className="h-4 w-4 text-green-500 shrink-0" /> Dedicated support</li>
               </ul>
-              <Link href="/login" className="mt-6 block text-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+              <Link href="/login?plan=business" className="mt-6 block text-center rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                 Start Business
               </Link>
             </div>

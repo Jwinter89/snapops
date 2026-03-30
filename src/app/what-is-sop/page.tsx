@@ -394,6 +394,7 @@ export default function WhatIsSopPage() {
               <Link href="/what-is-sop" className="hover:text-gray-700">What is an SOP?</Link>
               <Link href="/terms" className="hover:text-gray-700">Terms of Service</Link>
               <Link href="/privacy" className="hover:text-gray-700">Privacy Policy</Link>
+              <Link href="/disclaimer" className="hover:text-gray-700">Disclaimer</Link>
             </div>
           </div>
           <p className="mt-6 text-center text-xs text-gray-400">
