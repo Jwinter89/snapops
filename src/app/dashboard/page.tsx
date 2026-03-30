@@ -136,6 +136,12 @@ export default function DashboardPage() {
         <SOPGenerator onGenerated={() => setRefreshKey(k => k + 1)} />
         <SOPList refreshKey={refreshKey} />
       </main>
+
+      <footer className="border-t border-gray-100 py-6 mt-8">
+        <p className="text-center text-xs text-gray-400">
+          Developed by <a href="https://www.winterhowlers.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-600 underline">Winter Howlers</a>
+        </p>
+      </footer>
     </div>
   )
 }
